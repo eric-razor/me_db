@@ -1,0 +1,2 @@
+class JobappsController < ApplicationController
+end
