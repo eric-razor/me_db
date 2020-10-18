@@ -1,7 +1,7 @@
 class Api::V1::JobappsController < ApplicationController
 
     def index 
-        @apps = @Jobapps.all
+        @apps = Jobapp.all
 
         render json: @apps
     end
