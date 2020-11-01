@@ -2,8 +2,8 @@ class Api::V1::UsersController < ApplicationController
 
     def create
     @user = User.create!(signup_params)
-
-    if @user.valid?
+    
+    if @user.save
       session[:user_id] = @user.id
       render json: @user, status: :created
     else
@@ -16,7 +16,7 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def signup_params
-    params.require(:user).permit(:email, :password)
+    params.require(:user).permit(:username, :email, :password)
   end
 
 end
