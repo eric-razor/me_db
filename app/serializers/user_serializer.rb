@@ -1,5 +1,5 @@
 class SerializableUser < JSON::Serializable::Resource
     type 'users'
 
-    attributes :email, :password
+    attributes :username, :email, :password
 end
