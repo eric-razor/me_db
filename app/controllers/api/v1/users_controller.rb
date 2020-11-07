@@ -34,6 +34,16 @@ class Api::V1::UsersController < ApplicationController
     @user.destroy
   end
 
+   def get_user
+    if logged_in?
+      render json: {user: @user, token: @token}
+    else
+      render json: {
+        error: "No one logged in"
+      }
+    end
+  end
+
 
 
   private
