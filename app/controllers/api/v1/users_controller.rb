@@ -46,6 +46,7 @@ class Api::V1::UsersController < ApplicationController
 
 
 
+
   private
 
   def set_user

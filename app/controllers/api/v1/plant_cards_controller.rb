@@ -1,4 +1,4 @@
-class PlantCardsController < ApplicationController
+class Api::v1::PlantCardsController < ApplicationController
 
    def index 
         @plant_cards = PlantCard.all
