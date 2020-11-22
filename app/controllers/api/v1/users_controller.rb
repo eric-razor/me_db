@@ -1,5 +1,4 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :authorized, only: [:auto_login]
   before_action :set_user, only: [:show, :update, :destroy]
 
     def create
@@ -13,6 +12,10 @@ class Api::V1::UsersController < ApplicationController
     else
       render json: { errors: user.errors.full_messages}
     end
+  end
+
+  def spotify_login
+    byebug
   end
 
   def login 
@@ -31,8 +34,9 @@ class Api::V1::UsersController < ApplicationController
     render json: @user
   end
 
-  def destroy 
+  def logout
     @user.destroy
+    render json: { notice: "successfully logged out"}, status: :ok
   end
 
    def get_user
@@ -43,10 +47,7 @@ class Api::V1::UsersController < ApplicationController
         error: "No one logged in"
       }
     end
-  end
-
-
-
+   end
 
   private
 
