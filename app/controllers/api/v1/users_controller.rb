@@ -1,26 +1,30 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :authorized, only: [:auto_login]
   before_action :set_user, only: [:show, :update, :destroy]
 
     def create
     @user = User.create!(signup_params)
 
     if @user.valid?
-      token = encode_token({user_id: @user.id})
-      render json: {user: @user, tokent:token}
+      payload = {user_id: @user.id}
+      token = encode_token(payload)
+      # render key value pairs of user and token 
+      render json: {user: user, jwt: token}
     else
-      render json: {
-        status: 500
-      }
+      render json: { errors: user.errors.full_messages}
     end
+  end
+
+  def spotify_login
+    byebug
   end
 
   def login 
     @user = User.find_by(email: params[:email])
 
     if @user && @user.authenticate(params[:password])
-      token = encode_token({user_id: @user.id})
-      render json: {user: @user, token: token}
+      payload = {user_id: @user.id}
+      token = encode_token(payload)
+      render json: {user: @user, jwt: token, success: "Welcome back, #{@user.username}!"}
     else 
       render json: {error: "Invalid username or password"}
     end
@@ -30,8 +34,9 @@ class Api::V1::UsersController < ApplicationController
     render json: @user
   end
 
-  def destroy 
+  def logout
     @user.destroy
+    render json: { notice: "successfully logged out"}, status: :ok
   end
 
    def get_user
@@ -42,10 +47,7 @@ class Api::V1::UsersController < ApplicationController
         error: "No one logged in"
       }
     end
-  end
-
-
-
+   end
 
   private
 
