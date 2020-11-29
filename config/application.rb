@@ -18,9 +18,6 @@ require "rails/test_unit/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-
-RSpotify::authenticate(ENV['SPOTIFY_CLIENT_ID'], ENV['SPOTIFY_SECRET_ID'])
-
 module MeApi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
