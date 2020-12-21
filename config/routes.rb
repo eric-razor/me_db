@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      get "/login", to: "users#create"
+      post "/login", to: "users#login"
       get "/user", to: "users#show"
       delete "/logout", to: "users#logout"
       resources :users, only: [:create]
