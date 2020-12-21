@@ -1,33 +1,59 @@
 class Api::V1::UsersController < ApplicationController
 
-  # skip_before_action :authorized, only: [:spotify_request]
+  def create
+    # create a new user
+    @user = User.create!(signup_params)
 
-  def spotify_authorization
-    query_params = {
-      client_id: ENV['SPOTIFY_CLIENT_ID'],
-      response_type: "code",
-      redirect_uri: ENV['REDIRECT_URI'],
-      scope: "user-read-email user-library-read user-modify-playback-state user-modify-playback-state",
-      show_dialog: true
-    }
-
-    url = "https://accounts.spotify.com/authorize/"
-
-    redirect_to "#{url}?#{query_params.to_query}"
+    if @user.valid? 
+      session[:user_id] = @user.id
+      render json: @user, status: :created
+    else
+      render json: {
+        status: @user.errors.full_messages.to_sentence
+      }
+    end
 
   end
-
-  def create 
-
-  end
-
-  def show
+  
+  def login
+    # start a session for a user logging in 
+    @user = User.find_by(username: params[:username])
     byebug
+    if @user && @user.authenticate(params[:password])
+      session[:user_id] = @user.id
+      render json: @user, status: :ok
+    else 
+      render json: {
+        error: "Invalid Credentials (users#login)"
+      }
+    end
   end
 
-  def logout
-    @spotify_user.destroy
-    render json: { notice: "successfully logged out"}, status: :ok
+  def get_user
+    if logged_in?
+      render json: current_user
+    else
+      render json: {
+        error: "no one logged in (users#get_user)"
+      }
+    end
+  end
+    
+  def my_account
+
+    # find user by session id
+  end
+
+  def logout 
+    reset_session
+    flash[:message] = "Logged out."
+    # add redirect
+  end
+
+  protected
+
+  def signup_params
+    params.require(:user).permit(:username, :email, :password)
   end
 
 end

@@ -1,5 +1,3 @@
-class SerializableUser < JSON::Serializable::Resource
-    type 'users'
-
-    attributes :username, :email, :password
+class UserSerializer < ActiveModel::Serializer
+  attributes :id, :username, :email, :password
 end

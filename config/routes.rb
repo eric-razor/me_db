@@ -2,7 +2,8 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      get "/login", to: "users#create"
+      # assign '/' route to get_current_user
+      post "/login", to: "users#login"
       get "/user", to: "users#show"
       delete "/logout", to: "users#logout"
       resources :users, only: [:create]
