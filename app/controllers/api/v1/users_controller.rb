@@ -1,24 +1,46 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :login_required, :only => :my_account
-  def login 
-    byebug
-    @user = User.new
-    @user.username = params[:username]  
-    byebug
-  end
 
-  def process_login
-    if user = User.authenticate(params[:user])
-      #assign session id to user
-      session[:id] = user.id 
-      # redirect
+  def create
+    # create a new user
+    @user = User.create!(signup_params)
+
+    if @user.valid? 
+      session[:user_id] = @user.id
+      render json: @user, status: :created
     else
-      flash[:error] = "Invalid login."
-      # redirec
+      render json: {
+        status: @user.errors.full_messages.to_sentence
+      }
+    end
+
+  end
+  
+  def login
+    # start a session for a user logging in 
+    @user = User.find_by(username: params[:username])
+    byebug
+    if @user && @user.authenticate(params[:password])
+      session[:user_id] = @user.id
+      render json: @user, status: :ok
+    else 
+      render json: {
+        error: "Invalid Credentials (users#login)"
+      }
     end
   end
 
-  def my_account 
+  def get_user
+    if logged_in?
+      render json: current_user
+    else
+      render json: {
+        error: "no one logged in (users#get_user)"
+      }
+    end
+  end
+    
+  def my_account
+
     # find user by session id
   end
 
@@ -28,10 +50,10 @@ class Api::V1::UsersController < ApplicationController
     # add redirect
   end
 
-  def create
+  protected
 
+  def signup_params
+    params.require(:user).permit(:username, :email, :password)
   end
-
-
 
 end
