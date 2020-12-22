@@ -24,7 +24,7 @@ class Api::V1::UsersController < ApplicationController
       render json: @user, status: :ok
     else 
       render json: {
-        error: "Invalid Credentials (users#login)"
+        error: "Invalid Credentials"
       }
     end
   end
@@ -34,14 +34,9 @@ class Api::V1::UsersController < ApplicationController
       render json: current_user
     else
       render json: {
-        error: "no one logged in (users#get_user)"
+        error: "no one logged in"
       }
     end
-  end
-    
-  def my_account
-
-    # find user by session id
   end
 
   def logout 
