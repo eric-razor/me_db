@@ -18,7 +18,7 @@ class Api::V1::UsersController < ApplicationController
   def login
     # start a session for a user logging in 
     @user = User.find_by(username: params[:username])
-    byebug
+
     if @user && @user.authenticate(params[:password])
       session[:user_id] = @user.id
       render json: @user, status: :ok
@@ -30,6 +30,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def get_user
+    # retrieves the user from the last session 
     if logged_in?
       render json: current_user
     else
