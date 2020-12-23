@@ -5,7 +5,7 @@ Rails.application.routes.draw do
       # assign '/' route to get_current_user
       post "/login", to: "users#login"
       post "/signup", to: "users#create"
-      get "/user", to: "users#show"
+      get "/user", to: "users#get_user"
       delete "/logout", to: "users#logout"
       resources :users, only: [:create]
     end
