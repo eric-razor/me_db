@@ -4,5 +4,11 @@ class User < ApplicationRecord
     validates :password, length: {:in => 8..40,}, presence: true
 
     has_many :posts
+    has_many :comments
+    has_many :commented_posts, through: :comments,
+        source: :post
+    # sourced based on comment model :post
+    
+
     
 end
