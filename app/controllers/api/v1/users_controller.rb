@@ -14,6 +14,12 @@ class Api::V1::UsersController < ApplicationController
     end
 
   end
+
+  def show 
+    @user = User.find_by(session[:user_id])
+
+    render json: @user, status: :ok
+  end
   
   def login
     # start a session for a user logging in 
@@ -42,8 +48,6 @@ class Api::V1::UsersController < ApplicationController
 
   def logout 
     reset_session
-    flash[:message] = "Logged out."
-    # add redirect
   end
 
   protected
